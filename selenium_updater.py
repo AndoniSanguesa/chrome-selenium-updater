@@ -29,8 +29,15 @@ def update_chrome_drivers(options=Options()):
 
     # Runs Selenium to determine which version of the chromedriver is needed
     try:
-        webdriver.Chrome(chrome_options=options)
-        return
+        driver = webdriver.Chrome(chrome_options=options)
+        browser_version = driver.capabilities["browserVersion"].split(".")[0]
+        driver_version = driver.capabilities["chrome"]["chromedriverVersion"].split(".")[0]
+        driver.close()
+        if browser_version == driver_version:
+            return
+        
+        version_needed = browser_version
+
     except SessionNotCreatedException as e:
         if "only supports" not in e.msg:
             raise e
@@ -39,7 +46,7 @@ def update_chrome_drivers(options=Options()):
     # Finds and downloads the latest chromedriver version
     base_url = "https://chromedriver.storage.googleapis.com"
     driver_version = requests.get(f"{base_url}/LATEST_RELEASE_{version_needed}").text.strip()
-    filename = wget.download(f"{base_url}/{driver_version}/chromedriver_win32.zip")
+    wget.download(f"{base_url}/{driver_version}/chromedriver_win32.zip")
 
     # Checks for download completion
     if "chromedriver_win32.zip" not in os.listdir("./"):
@@ -56,7 +63,6 @@ def update_chrome_drivers(options=Options()):
         return
 
     # Deletes old driver and moves new one to the correct location
-    os.remove(f"{correct_path}/chromedriver.exe")
     shutil.move(f"./chromedriver.exe", f"{correct_path}/chromedriver.exe")
     os.remove("./chromedriver_win32.zip")
 
