@@ -1,6 +1,7 @@
 import os
 from selenium import webdriver
 from selenium.common.exceptions import SessionNotCreatedException
+from selenium.webdriver.chrome.options import Options
 import re
 import requests
 import wget
@@ -8,7 +9,7 @@ import zipfile
 import shutil
 
 
-def update_chrome_drivers():
+def update_chrome_drivers(options=Options()):
     # Finds all directories associated with the PATH environment variable
     path_directories = os.getenv("Path").split(";")
 
@@ -28,7 +29,7 @@ def update_chrome_drivers():
 
     # Runs Selenium to determine which version of the chromedriver is needed
     try:
-        webdriver.Chrome()
+        webdriver.Chrome(options=options)
         exit()
     except SessionNotCreatedException as e:
         if "only supports" not in e.msg:
@@ -61,7 +62,7 @@ def update_chrome_drivers():
 
     # Validates update allowed Selenium to run
     try:
-        webdriver.Chrome()
+        webdriver.Chrome(otions=options)
         print("Chrome drivers updated to version {}".format(driver_version))
         exit()
     except Exception as e:
