@@ -23,14 +23,14 @@ def update_chrome_drivers(options=Options()):
     # If the chromedriver is not found, exit the program
     if correct_path is None:
         print("Chromedriver not found, please install and set the PATH environment variable")
-        exit(1)
+        return
 
     version_needed = -1
 
     # Runs Selenium to determine which version of the chromedriver is needed
     try:
         webdriver.Chrome(options=options)
-        exit()
+        return
     except SessionNotCreatedException as e:
         if "only supports" not in e.msg:
             raise e
@@ -44,7 +44,7 @@ def update_chrome_drivers(options=Options()):
     # Checks for download completion
     if "chromedriver_win32.zip" not in os.listdir("./"):
         print("Download failed")
-        exit(1)
+        return
 
     # Extracts the chromedriver
     with zipfile.ZipFile("./chromedriver_win32.zip", 'r') as zip_ref:
@@ -53,7 +53,7 @@ def update_chrome_drivers(options=Options()):
     # Validates extraction
     if "chromedriver.exe" not in os.listdir("./"):
         print("Extraction failed")
-        exit(1)
+        return
 
     # Deletes old driver and moves new one to the correct location
     os.remove(f"{correct_path}/chromedriver.exe")
@@ -64,7 +64,7 @@ def update_chrome_drivers(options=Options()):
     try:
         webdriver.Chrome(otions=options)
         print("Chrome drivers updated to version {}".format(driver_version))
-        exit()
+        return
     except Exception as e:
         print(f"Update failed: {e}")
 
