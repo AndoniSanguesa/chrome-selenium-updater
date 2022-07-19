@@ -29,7 +29,7 @@ def update_chrome_drivers(options=Options()):
 
     # Runs Selenium to determine which version of the chromedriver is needed
     try:
-        webdriver.Chrome(options=options)
+        webdriver.Chrome(chrome_options=options)
         return
     except SessionNotCreatedException as e:
         if "only supports" not in e.msg:
@@ -62,7 +62,7 @@ def update_chrome_drivers(options=Options()):
 
     # Validates update allowed Selenium to run
     try:
-        webdriver.Chrome(otions=options)
+        webdriver.Chrome(chrome_options=options)
         print("Chrome drivers updated to version {}".format(driver_version))
         return
     except Exception as e:
